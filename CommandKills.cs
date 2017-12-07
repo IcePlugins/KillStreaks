@@ -7,7 +7,7 @@ namespace ExtraConcentratedJuice.KillStreaks
 {
     public class CommandKills : IRocketCommand
     {
-        public AllowedCaller AllowedCaller => AllowedCaller.Both;
+        public AllowedCaller AllowedCaller => AllowedCaller.Player;
 
         public string Name => "kills";
 

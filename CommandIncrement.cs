@@ -7,7 +7,7 @@ namespace ExtraConcentratedJuice.KillStreaks
 {
     public class CommandIncrement : IRocketCommand
     {
-        public AllowedCaller AllowedCaller => AllowedCaller.Both;
+        public AllowedCaller AllowedCaller => AllowedCaller.Player;
 
         public string Name => "increment";
 
@@ -27,7 +27,6 @@ namespace ExtraConcentratedJuice.KillStreaks
             {
                 KillStreaks.instance.killCount[uPlayer.Id] = killerKillCount + 1;
                 UnturnedChat.Say(caller, KillStreaks.instance.Translations.Instance.Translate("killstreak_increment"), UnityEngine.Color.green);
-
             }
             else
             {

@@ -1,4 +1,6 @@
 ﻿using Rocket.API;
+using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace ExtraConcentratedJuice.KillStreaks
 {
@@ -10,7 +12,8 @@ namespace ExtraConcentratedJuice.KillStreaks
         public string kill_streak_message_color;
         public int kill_divisor;
         public int kill_streak_threshold;
-
+        [XmlArrayItem(ElementName = "Group")]
+        public List<CommandGroup> CommandGroups;
 
         public void LoadDefaults()
         {
@@ -20,6 +23,22 @@ namespace ExtraConcentratedJuice.KillStreaks
             kill_streak_message_color = "magenta";
             kill_divisor = 5;
             kill_streak_threshold = 5;
+            CommandGroups = new List<CommandGroup>()
+            {
+                new CommandGroup { Commands = new List<string>() { "/heal {0}", "/give {0} 8 1", "/say woah" }, KillMin = 4, KillMax = 20 }
+            };
+        }
+
+        public class CommandGroup
+        {
+            public CommandGroup()
+            {
+            }
+
+            [XmlArrayItem(ElementName = "Commands")]
+            public List<string> Commands;
+            public int KillMin;
+            public int KillMax;
         }
     }
 }

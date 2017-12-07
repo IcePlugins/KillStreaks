@@ -11,6 +11,7 @@ using System.Xml.Serialization;
 using System.IO;
 using System.Xml;
 using Rocket.API.Collections;
+using Rocket.Core;
 
 namespace ExtraConcentratedJuice.KillStreaks
 {
@@ -161,7 +162,6 @@ namespace ExtraConcentratedJuice.KillStreaks
             if (killCount.TryGetValue(killerPlayer.Id, out int killerKillCount))
             {
                 killCount[killerPlayer.Id] = killerKillCount + 1;
-
             }
             else
             {
@@ -171,6 +171,16 @@ namespace ExtraConcentratedJuice.KillStreaks
             if (killCount[killerPlayer.Id] % Configuration.Instance.kill_divisor == 0 && killCount[killerPlayer.Id] >= Configuration.Instance.kill_streak_threshold)
             {
                 UnturnedChat.Say(string.Format(Configuration.Instance.kill_streak_message, killerPlayer.DisplayName, killCount[killerPlayer.Id]), UnturnedChat.GetColorFromName(Configuration.Instance.kill_streak_message_color, UnityEngine.Color.magenta));
+                foreach (KillStreaksConfig.CommandGroup group in Configuration.Instance.CommandGroups)
+                {
+                    if ((killCount[killerPlayer.Id] >= group.KillMin && killCount[killerPlayer.Id] <= (group.KillMax <= 0 ? group.KillMax : int.MaxValue)))
+                    {
+                        foreach(string cmd in group.Commands)
+                        {
+                            R.Commands.Execute(new Rocket.API.ConsolePlayer(), string.Format(cmd, killerPlayer.DisplayName));
+                        }
+                    }
+                }
             }
         }
 
@@ -182,7 +192,6 @@ namespace ExtraConcentratedJuice.KillStreaks
                 {
                     {"killstreak_increment", "[KillStreaks] Your killstreak has been incremented."},
                     {"killstreak_count", "[KillStreaks] You are on a {0} killstreak."},
-
                 };
             }
         }
