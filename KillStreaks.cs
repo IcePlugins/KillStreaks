@@ -183,7 +183,7 @@ namespace ExtraConcentratedJuice.KillStreaks
                 UnturnedChat.Say(string.Format(Configuration.Instance.kill_streak_message, killerPlayer.DisplayName, killCount[killerPlayer.Id]), UnturnedChat.GetColorFromName(Configuration.Instance.kill_streak_message_color, UnityEngine.Color.magenta));
                 foreach (KillStreaksConfig.CommandGroup group in Configuration.Instance.CommandGroups)
                 {
-                    if (killCount[killerPlayer.Id] >= group.KillMin && (group.KillMax <= 0 ? true : killCount[killerPlayer.Id] <= group.KillMax))
+                    if (killCount[killerPlayer.Id] >= group.KillMin && (killCount[killerPlayer.Id] <= group.KillMax || group.KillMax <= 0))
                     {
                         foreach(string cmd in group.Commands)
                         {
