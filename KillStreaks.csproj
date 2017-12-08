@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="CommandKills.cs" />
     <Compile Include="CommandIncrement.cs" />
+    <Compile Include="CommandRemoveKS.cs" />
     <Compile Include="KillStreaks.cs" />
     <Compile Include="KillStreaksConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

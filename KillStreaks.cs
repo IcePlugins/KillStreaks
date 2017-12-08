@@ -140,11 +140,21 @@ namespace ExtraConcentratedJuice.KillStreaks
             if (killCount.TryGetValue(player.Id, out int count) && Configuration.Instance.remove_streak_on_disconnect)
             {
                 killCount.Remove(player.Id);
+
             }
         }
 
         private void OnDeath(UnturnedPlayer player, SDG.Unturned.EDeathCause cause, SDG.Unturned.ELimb limb, CSteamID killer)
         {
+            if (killCount.TryGetValue(player.Id, out int playerKillCount))
+            {
+                if (killCount[player.Id] >= Configuration.Instance.kill_streak_lost_threshold && Configuration.Instance.kill_streak_lost_threshold > 0)
+                {
+                    UnturnedChat.Say(string.Format(Configuration.Instance.kill_streak_lose_message, player.DisplayName, killCount[player.Id]), UnturnedChat.GetColorFromName(Configuration.Instance.kill_streak_lost_message_color, UnityEngine.Color.red));
+                }
+                killCount[player.Id] = 0;
+            }
+
             string deathCause = cause.ToString();
 
             if (!deathCauses.Contains(deathCause))
@@ -173,7 +183,7 @@ namespace ExtraConcentratedJuice.KillStreaks
                 UnturnedChat.Say(string.Format(Configuration.Instance.kill_streak_message, killerPlayer.DisplayName, killCount[killerPlayer.Id]), UnturnedChat.GetColorFromName(Configuration.Instance.kill_streak_message_color, UnityEngine.Color.magenta));
                 foreach (KillStreaksConfig.CommandGroup group in Configuration.Instance.CommandGroups)
                 {
-                    if ((killCount[killerPlayer.Id] >= group.KillMin && killCount[killerPlayer.Id] <= (group.KillMax <= 0 ? group.KillMax : int.MaxValue)))
+                    if (killCount[killerPlayer.Id] >= group.KillMin && (group.KillMax <= 0 ? true : killCount[killerPlayer.Id] <= group.KillMax))
                     {
                         foreach(string cmd in group.Commands)
                         {
@@ -192,6 +202,7 @@ namespace ExtraConcentratedJuice.KillStreaks
                 {
                     {"killstreak_increment", "[KillStreaks] Your killstreak has been incremented."},
                     {"killstreak_count", "[KillStreaks] You are on a {0} killstreak."},
+                    {"killstreak_remove", "[KillStreaks] Your killstreak has been reset."},
                 };
             }
         }
