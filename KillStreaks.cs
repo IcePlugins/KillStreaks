@@ -1,17 +1,17 @@
-﻿using Rocket.Core.Plugins;
-using System.Linq;
+﻿using Rocket.API.Collections;
+using Rocket.Core;
 using Rocket.Core.Logging;
-using Rocket.Unturned.Player;
+using Rocket.Core.Plugins;
+using Rocket.Unturned;
+using Rocket.Unturned.Chat;
 using Rocket.Unturned.Events;
+using Rocket.Unturned.Player;
 using Steamworks;
 using System.Collections.Generic;
-using Rocket.Unturned.Chat;
-using Rocket.Unturned;
-using System.Xml.Serialization;
 using System.IO;
+using System.Linq;
 using System.Xml;
-using Rocket.API.Collections;
-using Rocket.Core;
+using System.Xml.Serialization;
 
 namespace ExtraConcentratedJuice.KillStreaks
 {
@@ -62,7 +62,6 @@ namespace ExtraConcentratedJuice.KillStreaks
             UnturnedPlayerEvents.OnPlayerDeath += OnDeath;
             U.Events.OnPlayerDisconnected += OnDisconnected;
             U.Events.OnPlayerConnected += OnConnected;
-
         }
 
         protected override void Unload()
@@ -140,7 +139,6 @@ namespace ExtraConcentratedJuice.KillStreaks
             if (killCount.TryGetValue(player.Id, out int count) && Configuration.Instance.remove_streak_on_disconnect)
             {
                 killCount.Remove(player.Id);
-
             }
         }
 
@@ -185,7 +183,7 @@ namespace ExtraConcentratedJuice.KillStreaks
                 {
                     if (killCount[killerPlayer.Id] >= group.KillMin && (killCount[killerPlayer.Id] <= group.KillMax || group.KillMax <= 0))
                     {
-                        foreach(string cmd in group.Commands)
+                        foreach (string cmd in group.Commands)
                         {
                             R.Commands.Execute(new Rocket.API.ConsolePlayer(), string.Format(cmd, killerPlayer.DisplayName));
                         }
@@ -194,17 +192,12 @@ namespace ExtraConcentratedJuice.KillStreaks
             }
         }
 
-        public override TranslationList DefaultTranslations
-        {
-            get
-            {
-                return new TranslationList()
+        public override TranslationList DefaultTranslations =>
+                new TranslationList
                 {
                     {"killstreak_increment", "[KillStreaks] Your killstreak has been incremented."},
                     {"killstreak_count", "[KillStreaks] You are on a {0} killstreak."},
                     {"killstreak_remove", "[KillStreaks] Your killstreak has been reset."},
                 };
-            }
-        }
     }
 }

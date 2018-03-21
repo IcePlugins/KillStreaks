@@ -17,7 +17,7 @@ namespace ExtraConcentratedJuice.KillStreaks
 
         public List<string> Aliases => new List<string> { "killstreak" };
 
-        public List<string> Permissions => new List<string>() { "killstreaks.kills" };
+        public List<string> Permissions => new List<string> { "killstreaks.kills" };
 
         public void Execute(IRocketPlayer caller, string[] args)
         {
